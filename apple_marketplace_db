@@ -1,0 +1,121 @@
+CREATE DATABASE IF NOT EXISTS apple_marketplace_db;
+
+USE apple_marketplace_db;
+
+CREATE TABLE COUNTRY (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE STATE (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    country_id INT,
+    FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+);
+
+CREATE TABLE CITY (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    state_id INT,
+    FOREIGN KEY (state_id) REFERENCES STATE(id)
+);
+
+CREATE TABLE ADDRESS (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    city_id INT,
+    FOREIGN KEY (city_id) REFERENCES CITY(id)
+);
+
+CREATE TABLE USD_EXCHANGE_RATE (
+    er_date DATE PRIMARY KEY,
+    er_usd DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE CUSTOMER (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    dni INT UNIQUE NOT NULL,
+    phone INT,
+    address_id INT,
+    is_subscribed TINYINT(1) NOT NULL DEFAULT 0,
+    FOREIGN KEY (address_id) REFERENCES ADDRESS(id)
+);
+
+CREATE TABLE SELLER (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    cuit VARCHAR(45) UNIQUE NOT NULL,
+    address_id INT,
+    FOREIGN KEY (address_id) REFERENCES ADDRESS(id)
+);
+
+CREATE TABLE SHIPPER (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    phone VARCHAR(45)
+);
+
+CREATE TABLE SHIPPING (
+    id INT PRIMARY KEY,
+    is_free_shipping TINYINT(1) NOT NULL DEFAULT 0,
+    shipping_charge_ars DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    shipper_id INT,
+    FOREIGN KEY (shipper_id) REFERENCES SHIPPER(id)
+);
+
+CREATE TABLE CATEGORY (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE BRAND (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE COLOR (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE PRODUCT (
+    id INT PRIMARY KEY,
+    name VARCHAR(45) NOT NULL,
+    color_id INT,
+    manufacture_year INT NOT NULL,
+    unit_price_usd DECIMAL(10,2) NOT NULL,
+    category_id INT,
+    brand_id INT,
+    FOREIGN KEY (color_id) REFERENCES COLOR(id),
+    FOREIGN KEY (category_id) REFERENCES CATEGORY(id),
+    FOREIGN KEY (brand_id) REFERENCES BRAND(id)
+);
+
+CREATE TABLE ORDER_SALE (
+    id INT PRIMARY KEY,
+    date DATE NOT NULL,
+    total_amount_usd DECIMAL(10,2) NOT NULL,
+    total_amount_ars DECIMAL(10,2) NOT NULL,
+    customer_id INT,
+    seller_id INT,
+    shipping_id INT,
+    er_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES CUSTOMER(id),
+    FOREIGN KEY (seller_id) REFERENCES SELLER(id),
+    FOREIGN KEY (shipping_id) REFERENCES SHIPPING(id),
+    FOREIGN KEY (er_date) REFERENCES USD_EXCHANGE_RATE(er_date)
+);
+
+CREATE TABLE ORDER_DETAIL (
+    id INT PRIMARY KEY,
+    total_product_price_usd DECIMAL(10,2) NOT NULL,
+    total_product_item INT NOT NULL,
+    order_id INT,
+    product_id INT,
+    FOREIGN KEY (order_id) REFERENCES ORDER_SALE(id),
+    FOREIGN KEY (product_id) REFERENCES PRODUCT(id)
+);
+
+
