@@ -30,7 +30,7 @@ CREATE TABLE ADDRESS (
 
 CREATE TABLE USD_EXCHANGE_RATE (
     er_date DATE PRIMARY KEY NOT NULL,
-    er_usd DECIMAL(10,2) NOT NULL
+    er_usd DECIMAL(10,2) NOT NULL 
 );
 
 CREATE TABLE CUSTOMER (
@@ -57,10 +57,11 @@ CREATE TABLE SHIPPER (
     phone INT NOT NULL
 );
 
+/* Default rule: if free shipping is true then shipping charge is $0.00 */
 CREATE TABLE SHIPPING (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    is_free_shipping TINYINT(1) NOT NULL DEFAULT 0,
-    shipping_charge_ars DECIMAL(10,2) NOT NULL,
+    is_free_shipping TINYINT(1) NOT NULL DEFAULT 1,
+    shipping_charge_ars DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     shipper_id INT NOT NULL,
     FOREIGN KEY (shipper_id) REFERENCES SHIPPER(id)
 );
