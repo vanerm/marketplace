@@ -1,0 +1,18 @@
+id,name,distance_km,state_id
+1000,CABA,0.00,1
+1001,La Plata,60.00,1
+1002,Rosario,300.00,2
+1003,Mar del Plata,400.00,1
+1004,Paraná,470.00,1
+1005,Córdoba,700.00,4
+1006,San Luis,800.00,5
+1007,Viedma,960.00,6
+1008,Mendoza,"1,050.00",7
+1009,Resistencia,"1,050.00",8
+1010,Neuquén,"1,150.00",9
+1011,San Fernando del Valle de Catamarca,"1,160.00",10
+1012,San Miguel de Tucumán,"1,250.00",11
+1013,Rawson,"1,350.00",12
+1014,Salta,"1,600.00",13
+1015,Río Gallegos,"2,550.00",14
+1016,Ushuaia,"3,100.00",15
