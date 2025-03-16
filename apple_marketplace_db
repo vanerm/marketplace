@@ -1,7 +1,13 @@
+-- Drop database if exists apple_marketplace_db; 
+DROP DATABASE IF EXISTS apple_marketplace_db;
+
+-- Create database apple_marketplace_db;
 CREATE DATABASE IF NOT EXISTS apple_marketplace_db;
 
+-- Use database apple_marketplace_db;
 USE apple_marketplace_db;
 
+-- Create Tables
 CREATE TABLE COUNTRY (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(45) NOT NULL
@@ -37,8 +43,8 @@ CREATE TABLE USD_EXCHANGE_RATE (
 CREATE TABLE CUSTOMER (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(45) NOT NULL,
-    dni INT UNIQUE NOT NULL,
-    phone INT NOT NULL,
+    dni VARCHAR(15) UNIQUE NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     address_id INT NOT NULL,
     is_subscribed TINYINT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (address_id) REFERENCES ADDRESS(id)
@@ -55,7 +61,7 @@ CREATE TABLE SELLER (
 CREATE TABLE SHIPPER (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(45) NOT NULL,
-    phone INT NOT NULL
+    phone VARCHAR(15) NOT NULL
 );
 
 /* Default rule: if free shipping is true then shipping charge is $0.00 */
@@ -119,5 +125,422 @@ CREATE TABLE ORDER_DETAIL (
     FOREIGN KEY (order_id) REFERENCES ORDER_SALE(id),
     FOREIGN KEY (product_id) REFERENCES PRODUCT(id)
 );
+
+-- Insert DATA to DB
+-- insert data into COUNTRY table
+INSERT INTO COUNTRY (name) VALUES ('Argentina');
+
+-- insert data into STATE table
+INSERT INTO STATE (name, country_id) VALUES ('Buenos Aires', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Santa Fe', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Entre Rios', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Cordoba', 1);
+INSERT INTO STATE (name, country_id) VALUES ('San Luis', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Rio Negro', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Mendoza', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Chaco', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Neuquen', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Catamarca', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Tucuman', 1); 
+INSERT INTO STATE (name, country_id) VALUES ('Chubut', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Salta', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Santa Cruz', 1);
+INSERT INTO STATE (name, country_id) VALUES ('Tierra del Fuego', 1);
+
+-- insert data into CITY table
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('CABA', 0.00, 1);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('La Plata', 60.00, 1);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Rosario', 300.00, 2);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Mar del Plata', 400.00, 1);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Parana', 500.00, 3);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Cordoba', 700.00, 4);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('San Luis', 800.00, 5);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Viedma', 1000.00, 6);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Mendoza', 1000.00, 7);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Resistencia', 1100.00, 8);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Neuquen', 1200.00, 9);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('San Fernando del Valle de Catamarca', 1300.00, 10);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('San Miguel de Tucuman', 1400.00, 11);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Rawson', 1400.00, 12);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Salta', 1600.00, 13);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Rio Gallegos', 2600.00, 14);
+INSERT INTO CITY (name, distance_km,state_id) VALUES ('Ushuaia', 3100.00, 15);
+
+-- Poblate Table ADDRESS from .csv file
+-- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/address.csv' INTO TABLE ADDRESS FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into ADDRESS table
+INSERT INTO ADDRESS (name, city_id) VALUES ('Av. Corrientes 1234', 1);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Av. 9 de Julio 5678', 1);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Av. Rivadavia 9101', 1);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 12 3456', 2);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 7 8901', 2);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 1 2345', 3);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 3 6789', 3);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 5 1234', 4);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 7 5678', 4);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 9 9101', 4);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 11 3456', 5);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 13 8901', 5);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 15 2345', 6);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 17 6789', 6);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 19 1234', 7);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 21 5678', 7);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 23 9101', 8);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 25 3456', 8);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 27 8901', 9);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 29 2345', 9);    
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 31 6789', 10);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 33 1234', 10);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 35 5678', 11);   
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 37 9101', 11);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 39 3456', 12);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 41 8901', 12);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 43 2345', 13);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 45 6789', 13);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 47 1234', 14);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 49 5678', 14);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 51 9101', 15);
+INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 53 3456', 15);
+
+-- Poblate Table USD_EXCHANGE_RATE from .csv file
+-- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/usd_exchange_rate.csv' INTO TABLE USD_EXCHANGE_RATE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into USD_EXCHANGE_RATE table
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-01-01', 100.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-02-01', 105.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-03-01', 110.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-04-01', 115.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-05-01', 120.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-06-01', 125.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-07-01', 130.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-08-01', 135.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-09-01', 140.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-10-01', 145.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-11-01', 150.00);
+INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-12-01', 155.00);
+
+-- Poblate Table CUSTOMER from .csv file
+-- LOAD DATA INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/customer.csv' INTO TABLE CUSTOMER FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into CUSTOMER table
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Juan Perez', '30-12345678-9', 01112345678, 1, 1);
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Maria Lopez', '30-23456789-0', 01123456789, 2, 1);
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Pedro Gomez', '30-34567890-1', 01134567890, 3, 1);
+
+-- insert data into SELLER table
+INSERT INTO SELLER (name, cuit, address_id) VALUES ('Mac Station', '30-12345678-9', 1);
+INSERT INTO SELLER (name, cuit, address_id) VALUES ('iPoint', '30-23456789-0', 2);
+INSERT INTO SELLER (name, cuit, address_id) VALUES ('One Click', '30-34567890-1', 3);
+
+-- insert data into SHIPPER table
+INSERT INTO SHIPPER (name, phone) VALUES ('OCA', 01112345678);
+INSERT INTO SHIPPER (name, phone) VALUES ('Correo Argentino', 01123456789);
+INSERT INTO SHIPPER (name, phone) VALUES ('Andreani', 01134567890);
+
+-- Populate Table SHIPPING from .csv file
+-- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/shipping.csv' INTO TABLE SHIPPING FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into SHIPPING table
+INSERT INTO SHIPPING (is_free_shipping, shipper_id) VALUES (1, 1);
+INSERT INTO SHIPPING (is_free_shipping, shipper_id) VALUES (0, 2);
+INSERT INTO SHIPPING (is_free_shipping, shipper_id) VALUES (0, 3);
+
+
+-- insert data into CATEGORY table
+INSERT INTO CATEGORY (name) VALUES ('iPhone');
+INSERT INTO CATEGORY (name) VALUES ('iPad');
+INSERT INTO CATEGORY (name) VALUES ('MacBook');
+INSERT INTO CATEGORY (name) VALUES ('Apple Watch');
+INSERT INTO CATEGORY (name) VALUES ('AirPods');
+
+-- insert data into BRAND table
+INSERT INTO BRAND (name) VALUES ('Apple');
+
+-- insert data into COLOR table
+INSERT INTO COLOR (name) VALUES ('Black');
+INSERT INTO COLOR (name) VALUES ('Blue');
+INSERT INTO COLOR (name) VALUES ('Gold');
+INSERT INTO COLOR (name) VALUES ('Pink');
+INSERT INTO COLOR (name) VALUES ('Red');
+INSERT INTO COLOR (name) VALUES ('Silver');
+INSERT INTO COLOR (name) VALUES ('Space Gray');
+INSERT INTO COLOR (name) VALUES ('White');
+
+-- insert data into PRODUCT table de Apple
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPhone 12', 1, 2020, 799.00, 1, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPhone 12 Pro', 2, 2020, 999.00, 1, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPhone 12 Pro Max', 3, 2020, 1099.00, 1, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPhone SE', 4, 2020, 399.00, 1, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPad', 1, 2020, 329.00, 2, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPad Pro', 2, 2020, 999.00, 2, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPad Air', 3, 2020, 599.00, 2, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iPad Mini', 4, 2019, 399.00, 2, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('MacBook Air', 4, 2020, 999.00, 3, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('MacBook Pro', 3, 2020, 1299.00, 3, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('iMac', 2, 2020, 1099.00, 3, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('Mac Pro', 1, 2019, 5999.00, 3, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('Apple Watch SE', 3, 2020, 279.00, 4, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('Apple Watch Series 6', 4, 2020, 399.00, 4, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('Apple Watch Nike', 5, 2020, 429.00, 4, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('Apple Watch Hermes', 6, 2020, 1249.00, 4, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods Max', 8, 2020, 159.00, 5, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods 2nd Gen', 8, 2021, 249.00, 5, 1);
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods 3rd Gen', 8, 2022, 349.00, 5, 1);  
+INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods Pro 2nd Gen', 8, 2023, 449.00, 5, 1);  
+
+-- Poblate Table ORDER_SALE from .csv file
+-- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/order_sale.csv' INTO TABLE ORDER_SALE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into ORDER_SALE table
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-01-01', 100.00, 10000.00, 1, 1, 1, '2022-01-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-02-01', 105.00, 10500.00, 2, 2, 2, '2022-02-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-03-01', 110.00, 11000.00, 3, 3, 3, '2022-03-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-04-01', 115.00, 11500.00, 1, 1, 1, '2022-04-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-05-01', 120.00, 12000.00, 2, 2, 2, '2022-05-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-06-01', 125.00, 12500.00, 3, 3, 3, '2022-06-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-07-01', 130.00, 13000.00, 1, 1, 1, '2022-07-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-08-01', 135.00, 13500.00, 2, 2, 2, '2022-08-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-09-01', 140.00, 14000.00, 3, 3, 3, '2022-09-01');
+INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-10-01', 145.00, 14500.00, 1, 1, 1, '2022-10-01');
+
+
+-- Poblate Table ORDER_DETAIL from .csv file
+-- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/order_detail.csv' INTO TABLE ORDER_DETAIL FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+-- insert data into ORDER_DETAIL table
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (799.00, 1, 1, 1);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (329.00, 1, 2, 5);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (999.00, 1, 3, 2);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (399.00, 1, 4, 3);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (1299.00, 1, 5, 6);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (279.00, 1, 6, 4);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (159.00, 1, 7, 6);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (249.00, 1, 8, 6);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (349.00, 1, 9, 6);
+INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (449.00, 1, 10, 6);
+
+
+-- Views
+-- Create View the total amount in USD and in ARS of all orders
+CREATE VIEW ORDER_TOTAL_AMOUNT AS
+SELECT id, total_amount_usd, total_amount_ars
+FROM ORDER_SALE;
+
+-- Create View the total amount in USD of all orders by customer
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CUSTOMER AS
+SELECT customer_id, SUM(total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE
+GROUP BY customer_id;
+
+-- Create View the total amount in USD of all orders by seller
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SELLER AS
+SELECT seller_id, SUM(total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE
+GROUP BY seller_id;
+
+-- Create View the total amount in USD of all orders by product
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_PRODUCT AS
+SELECT product_id, SUM(total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL
+GROUP BY product_id;
+
+-- Create View the total amount in USD and in ARS of all orders by category
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CATEGORY AS
+SELECT id, SUM(total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL
+GROUP BY id;
+
+-- Create View the total amount in USD of all orders by color
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_COLOR AS
+SELECT id, SUM(total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL
+GROUP BY id;    
+
+-- Create View the total amount in USD of all orders by city
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CITY AS
+SELECT id, SUM(total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE
+GROUP BY id;
+
+-- Create View the total amount in USD of all orders by shipper
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SHIPPER AS
+SELECT id, SUM(total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE
+GROUP BY id;
+
+-- Functions
+
+-- Function 1: At table ORDER_SALE, update the total_amount_ars column with the total_amount_usd column multiplied by the exchange rate
+UPDATE ORDER_SALE
+SET total_amount_ars = total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = DATE);
+
+-- Function 2: At table Shipping, update the shipping_charge column with the following rule:
+-- If free shipping is true then shipping charge is $0.00
+-- if free shipping is false:
+-- if state is Buenos Aires then shipping charge is $0 else shipping charge is $100 every 100 km to the city
+UPDATE SHIPPING
+SET shipping_charge_ars = CASE
+    WHEN is_free_shipping = 1 THEN 0.00
+    ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = SHIPPING.id) / 100
+END;
+
+-- Stored Procedures 
+-- Create Stored Procedure to insert a new order
+DELIMITER //
+CREATE PROCEDURE INSERT_ORDER(IN date DATE, IN total_amount_usd DECIMAL(10,2), IN total_amount_ars DECIMAL(10,2), IN customer_id INT, IN seller_id INT, IN shipping_id INT, IN er_date DATE)
+BEGIN
+    INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date)
+    VALUES (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date);
+END //
+DELIMITER ;
+
+-- Create Stored Procedure to insert a new order detail
+DELIMITER //
+CREATE PROCEDURE INSERT_ORDER_DETAIL(IN total_product_price_usd DECIMAL(10,2), IN total_product_item INT, IN order_id INT, IN product_id INT)
+BEGIN
+    INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id)
+    VALUES (total_product_price_usd, total_product_item, order_id, product_id);
+END //
+DELIMITER ;
+
+-- Create Stored Procedure to update the total amount in USD and in ARS of an order
+DELIMITER //
+CREATE PROCEDURE UPDATE_ORDER_TOTAL_AMOUNT(IN id INT, IN total_amount_usd DECIMAL(10,2), IN total_amount_ars DECIMAL(10,2))
+BEGIN
+    UPDATE ORDER_SALE
+    SET total_amount_usd = total_amount_usd, total_amount_ars = total_amount_ars
+    WHERE id = id;
+END //
+DELIMITER ;
+
+-- Create Stored Procedure to update the shipping charge of a shipping
+DELIMITER //
+CREATE PROCEDURE UPDATE_SHIPPING_CHARGE(IN id INT, IN is_free_shipping TINYINT(1), IN shipping_charge_ars DECIMAL(10,2))
+BEGIN
+    UPDATE SHIPPING
+    SET is_free_shipping = is_free_shipping, shipping_charge_ars = shipping_charge_ars
+    WHERE id = id;
+END //
+DELIMITER ;
+
+-- Create Stored Procedure to delete an order
+DELIMITER //
+CREATE PROCEDURE DELETE_ORDER(IN id INT)
+BEGIN
+    DELETE FROM ORDER_SALE
+    WHERE id = id;
+END //
+DELIMITER ;
+
+-- Create Stored Procedure to delete an order detail
+DELIMITER //
+CREATE PROCEDURE DELETE_ORDER_DETAIL(IN id INT)
+BEGIN
+    DELETE FROM ORDER_DETAIL
+    WHERE id = id;
+END //
+DELIMITER ;
+
+-- Triggers
+-- Create a Trigger to update the total product price in USD of an order detail after insert
+DELIMITER //
+CREATE TRIGGER before_order_detail_insert
+BEFORE INSERT ON ORDER_DETAIL
+FOR EACH ROW
+BEGIN
+    DECLARE unit_price DECIMAL(10,2);
+    SELECT unit_price_usd INTO unit_price FROM PRODUCT WHERE product_id = NEW.product_id;
+    SET NEW.total_product_price_usd = NEW.total_product_item * unit_price;
+END;
+DELIMITER ;
+
+-- Create a Trigger to update the total amount in USD and in ARS of an order after update
+DELIMITER //
+CREATE TRIGGER before_order_sale_update
+BEFORE UPDATE ON ORDER_SALE
+FOR EACH ROW    
+    
+BEGIN
+    SET NEW.total_amount_usd = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date);
+    SET NEW.total_amount_ars = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date);
+END;
+DELIMITER ;
+
+-- Create a Trigger to update the total product price in USD of an order detail after insert
+DELIMITER //
+CREATE TRIGGER UPDATE_TOTAL_AMOUNT_AFTER_INSERT
+AFTER INSERT ON ORDER_SALE
+FOR EACH ROW
+BEGIN
+    UPDATE ORDER_SALE
+    SET total_amount_usd = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date),
+    total_amount_ars = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date)
+    WHERE id = NEW.id;
+END //
+DELIMITER ;
+
+-- Create a Trigger to update the total amount in USD and in ARS of an order after update
+DELIMITER //
+CREATE TRIGGER UPDATE_TOTAL_AMOUNT_AFTER_UPDATE
+AFTER UPDATE ON ORDER_SALE
+FOR EACH ROW
+BEGIN
+    UPDATE ORDER_SALE
+    SET total_amount_usd = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date),
+    total_amount_ars = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date)
+    WHERE id = NEW.id;
+END //
+DELIMITER ;
+
+-- Create a Trigger to update the shipping charge of a shipping after insert
+DELIMITER //
+CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_INSERT
+AFTER INSERT ON SHIPPING
+FOR EACH ROW
+BEGIN
+    UPDATE SHIPPING
+    SET shipping_charge_ars = CASE
+        WHEN NEW.is_free_shipping = 1 THEN 0.00
+        ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = NEW.id) / 100
+    END
+    WHERE id = NEW.id;
+END //
+DELIMITER ;
+
+-- Create a Trigger to update the shipping charge of a shipping after update
+DELIMITER //
+CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_UPDATE
+AFTER UPDATE ON SHIPPING
+FOR EACH ROW    
+BEGIN
+    UPDATE SHIPPING
+    SET shipping_charge_ars = CASE
+        WHEN NEW.is_free_shipping = 1 THEN 0.00
+        ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = NEW.id) / 100
+    END
+    WHERE id = NEW.id;
+END //
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
