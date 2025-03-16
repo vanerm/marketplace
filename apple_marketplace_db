@@ -166,9 +166,6 @@ INSERT INTO CITY (name, distance_km,state_id) VALUES ('Salta', 1600.00, 13);
 INSERT INTO CITY (name, distance_km,state_id) VALUES ('Rio Gallegos', 2600.00, 14);
 INSERT INTO CITY (name, distance_km,state_id) VALUES ('Ushuaia', 3100.00, 15);
 
--- Poblate Table ADDRESS from .csv file
--- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/address.csv' INTO TABLE ADDRESS FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
-
 -- insert data into ADDRESS table
 INSERT INTO ADDRESS (name, city_id) VALUES ('Av. Corrientes 1234', 1);
 INSERT INTO ADDRESS (name, city_id) VALUES ('Av. 9 de Julio 5678', 1);
@@ -203,9 +200,6 @@ INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 49 5678', 14);
 INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 51 9101', 15);
 INSERT INTO ADDRESS (name, city_id) VALUES ('Calle 53 3456', 15);
 
--- Poblate Table USD_EXCHANGE_RATE from .csv file
--- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/usd_exchange_rate.csv' INTO TABLE USD_EXCHANGE_RATE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
-
 -- insert data into USD_EXCHANGE_RATE table
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-01-01', 100.00);
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-02-01', 105.00);
@@ -219,9 +213,6 @@ INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-09-01', 140.00);
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-10-01', 145.00);
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-11-01', 150.00);
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-12-01', 155.00);
-
--- Poblate Table CUSTOMER from .csv file
--- LOAD DATA INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/customer.csv' INTO TABLE CUSTOMER FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- insert data into CUSTOMER table
 INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Juan Perez', '30-12345678-9', 01112345678, 1, 1);
@@ -237,9 +228,6 @@ INSERT INTO SELLER (name, cuit, address_id) VALUES ('One Click', '30-34567890-1'
 INSERT INTO SHIPPER (name, phone) VALUES ('OCA', 01112345678);
 INSERT INTO SHIPPER (name, phone) VALUES ('Correo Argentino', 01123456789);
 INSERT INTO SHIPPER (name, phone) VALUES ('Andreani', 01134567890);
-
--- Populate Table SHIPPING from .csv file
--- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/shipping.csv' INTO TABLE SHIPPING FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- insert data into SHIPPING table
 INSERT INTO SHIPPING (is_free_shipping, shipper_id) VALUES (1, 1);
@@ -289,9 +277,6 @@ INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_
 INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods 3rd Gen', 8, 2022, 349.00, 5, 1);  
 INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id) VALUES ('AirPods Pro 2nd Gen', 8, 2023, 449.00, 5, 1);  
 
--- Poblate Table ORDER_SALE from .csv file
--- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/order_sale.csv' INTO TABLE ORDER_SALE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
-
 -- insert data into ORDER_SALE table
 INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-01-01', 100.00, 10000.00, 1, 1, 1, '2022-01-01');
 INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-02-01', 105.00, 10500.00, 2, 2, 2, '2022-02-01');
@@ -304,9 +289,6 @@ INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, s
 INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-09-01', 140.00, 14000.00, 3, 3, 3, '2022-09-01');
 INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date) VALUES ('2022-10-01', 145.00, 14500.00, 1, 1, 1, '2022-10-01');
 
-
--- Poblate Table ORDER_DETAIL from .csv file
--- LOAD DATA LOCAL INFILE '/Users/vanesamizrahi/Desktop/Sql/AppleMarketplace/Tablas/order_detail.csv' INTO TABLE ORDER_DETAIL FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- insert data into ORDER_DETAIL table
 INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (799.00, 1, 1, 1);
