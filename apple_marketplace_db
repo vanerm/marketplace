@@ -406,36 +406,51 @@ DELIMITER ;
 
 -- Create Stored Procedure to insert a new order detail
 DELIMITER //
-CREATE PROCEDURE INSERT_ORDER_DETAIL(IN total_product_price_usd DECIMAL(10,2), IN total_product_item INT, IN order_id INT, IN product_id INT)
+CREATE PROCEDURE INSERT_ORDER_DETAIL(
+    IN p_total_product_price_usd DECIMAL(10,2), 
+    IN p_total_product_item INT, 
+    IN p_order_id INT, 
+    IN p_product_id INT
+    )
 BEGIN
     INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id)
-    VALUES (total_product_price_usd, total_product_item, order_id, product_id);
+    VALUES (p_total_product_price_usd, p_total_product_item, p_order_id, p_product_id);
 END //
 DELIMITER ;
 
 -- Create Stored Procedure to update the total amount in USD and in ARS of an order
 DELIMITER //
-CREATE PROCEDURE UPDATE_ORDER_TOTAL_AMOUNT(IN id INT, IN total_amount_usd DECIMAL(10,2), IN total_amount_ars DECIMAL(10,2))
+CREATE PROCEDURE UPDATE_ORDER_TOTAL_AMOUNT(
+    IN p_id INT, 
+    IN p_total_amount_usd DECIMAL(10,2), 
+    IN p_total_amount_ars DECIMAL(10,2)
+    )
 BEGIN
     UPDATE ORDER_SALE
-    SET total_amount_usd = total_amount_usd, total_amount_ars = total_amount_ars
-    WHERE id = id;
+    SET total_amount_usd = p_total_amount_usd, total_amount_ars = p_total_amount_ars
+    WHERE id = p_id;
 END //
 DELIMITER ;
 
 -- Create Stored Procedure to update the shipping charge of a shipping
 DELIMITER //
-CREATE PROCEDURE UPDATE_SHIPPING_CHARGE(IN id INT, IN is_free_shipping TINYINT(1), IN shipping_charge_ars DECIMAL(10,2))
+CREATE PROCEDURE UPDATE_SHIPPING_CHARGE(
+    IN p_id INT, 
+    IN p_is_free_shipping TINYINT(1), 
+    IN p_shipping_charge_ars DECIMAL(10,2)
+    )
 BEGIN
     UPDATE SHIPPING
-    SET is_free_shipping = is_free_shipping, shipping_charge_ars = shipping_charge_ars
-    WHERE id = id;
+    SET is_free_shipping = p_is_free_shipping, shipping_charge_ars = p_shipping_charge_ars
+    WHERE id = p_id;
 END //
 DELIMITER ;
 
 -- Create Stored Procedure to delete an order
 DELIMITER //
-CREATE PROCEDURE DELETE_ORDER(IN id INT)
+CREATE PROCEDURE DELETE_ORDER(
+    IN id INT
+    )
 BEGIN
     DELETE FROM ORDER_SALE
     WHERE id = id;
@@ -444,7 +459,9 @@ DELIMITER ;
 
 -- Create Stored Procedure to delete an order detail
 DELIMITER //
-CREATE PROCEDURE DELETE_ORDER_DETAIL(IN id INT)
+CREATE PROCEDURE DELETE_ORDER_DETAIL(
+    IN id INT
+    )
 BEGIN
     DELETE FROM ORDER_DETAIL
     WHERE id = id;
