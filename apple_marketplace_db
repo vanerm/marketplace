@@ -304,19 +304,35 @@ INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id,
 
 
 -- Views
--- Create View to get the total sum of all orders in USD and ARS
-CREATE VIEW ORDER_TOTAL_AMOUNT AS
+-- Create View to get the total sum of all orders in USD and ARS by year
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_YEAR AS
 SELECT 
+    YEAR(date) AS order_year, -- add year column
     SUM(total_amount_usd) AS total_amount_usd_sum, 
     SUM(total_amount_ars) AS total_amount_ars_sum
-FROM ORDER_SALE;
+FROM ORDER_SALE
+GROUP BY order_year; -- group by year
+
+-- Create View to get the total sum of all orders in USD and ARS by year/month
+CREATE VIEW ORDER_TOTAL_AMOUNT_BY_YEAR_MONTH AS
+SELECT 
+    YEAR(date) AS order_year, -- add year column
+    MONTH(date) AS order_month, -- add month column
+    SUM(total_amount_usd) AS total_amount_usd_sum, 
+    SUM(total_amount_ars) AS total_amount_ars_sum
+FROM ORDER_SALE
+GROUP BY order_year, order_month; -- group by year and month
 
 -- Create View for Top 10 Customers by Total Amount in USD
+-- add customer name and customer id to the view
 CREATE VIEW ORDER_TOP_10_CUSTOMERS AS
-SELECT customer_id, 
-       SUM(total_amount_usd) AS total_amount_usd
-FROM ORDER_SALE
-GROUP BY customer_id
+SELECT 
+    cu.id AS customer_id,
+    cu.name,        
+    SUM(o.total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE o
+JOIN CUSTOMER cu ON o.customer_id = cu.id
+GROUP BY cu.id, cu.name
 ORDER BY total_amount_usd DESC
 LIMIT 10;
 
@@ -333,33 +349,61 @@ ORDER BY total_amount_usd DESC;
 
 -- Create View the total amount in USD of all orders by product
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_PRODUCT AS
-SELECT product_id, SUM(total_product_price_usd) AS total_product_price_usd
-FROM ORDER_DETAIL
-GROUP BY product_id;
+SELECT 
+    od.product_id, 
+    p.name,
+    SUM(od.total_product_item) AS total_product_item,
+    SUM(od.total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL od
+JOIN PRODUCT p ON od.product_id = p.id
+GROUP BY od.product_id, p.name;
 
--- Create View the total amount in USD and in ARS of all orders by category
+-- Create View the total amount in USD of all orders by category
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CATEGORY AS
-SELECT id, SUM(total_product_price_usd) AS total_product_price_usd
-FROM ORDER_DETAIL
-GROUP BY id;
+SELECT 
+    c.name AS category_name, 
+    SUM(od.total_product_item) AS total_product_item,
+    SUM(od.total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL od
+JOIN PRODUCT p ON od.product_id = p.id
+JOIN CATEGORY c ON p.category_id = c.id
+GROUP BY c.name;
 
 -- Create View the total amount in USD of all orders by color
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_COLOR AS
-SELECT id, SUM(total_product_price_usd) AS total_product_price_usd
-FROM ORDER_DETAIL
-GROUP BY id;    
+SELECT 
+    p.color_id, 
+    co.name AS color_name,
+    SUM(od.total_product_price_usd) AS total_product_price_usd
+FROM ORDER_DETAIL od
+JOIN PRODUCT p ON od.product_id = p.id
+JOIN COLOR co ON p.color_id = co.id
+GROUP BY p.color_id, co.name
+ORDER BY total_product_price_usd DESC;  
 
 -- Create View the total amount in USD of all orders by city
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CITY AS
-SELECT id, SUM(total_amount_usd) AS total_amount_usd
-FROM ORDER_SALE
-GROUP BY id;
+SELECT 
+    a.city_id, 
+    c.name AS city_name,
+    SUM(o.total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE o
+JOIN CUSTOMER cu ON o.customer_id = cu.id
+JOIN ADDRESS a ON cu.address_id = a.id
+JOIN CITY c ON a.city_id = c.id
+GROUP BY a.city_id, c.name
+ORDER BY total_amount_usd DESC;
 
 -- Create View the total amount in USD of all orders by shipper
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SHIPPER AS
-SELECT id, SUM(total_amount_usd) AS total_amount_usd
-FROM ORDER_SALE
-GROUP BY id;
+SELECT 
+    s.id, 
+    sh.name AS shipper_name, 
+    SUM(o.total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE o
+JOIN SHIPPING s ON o.seller_id = s.id
+JOIN SHIPPER sh ON s.shipper_id = sh.id
+GROUP BY s.id, sh.name;
 
 -- Functions
 
