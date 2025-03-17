@@ -370,10 +370,37 @@ END;
 -- Stored Procedures 
 -- Create Stored Procedure to insert a new order
 DELIMITER //
-CREATE PROCEDURE INSERT_ORDER(IN date DATE, IN total_amount_usd DECIMAL(10,2), IN total_amount_ars DECIMAL(10,2), IN customer_id INT, IN seller_id INT, IN shipping_id INT, IN er_date DATE)
+
+CREATE PROCEDURE INSERT_ORDER(
+    IN p_date DATE, 
+    IN p_total_amount_usd DECIMAL(10,2), 
+    IN p_total_amount_ars DECIMAL(10,2), 
+    IN p_customer_id INT, 
+    IN p_seller_id INT, 
+    IN p_shipping_id INT, 
+    IN p_er_date DATE
+)
 BEGIN
+    DECLARE v_er_date DATE;
+
+    -- Inicializar v_er_date con NULL
+    SET v_er_date = NULL;
+
+    -- Buscar la fecha exacta en USD_EXCHANGE_RATE
+    SELECT er_date INTO v_er_date 
+    FROM USD_EXCHANGE_RATE 
+    WHERE er_date = p_er_date;
+
+    -- Si no existe, buscar la fecha más cercana
+    IF v_er_date IS NULL THEN
+        SELECT MIN(er_date) INTO v_er_date
+        FROM USD_EXCHANGE_RATE 
+        WHERE er_date > p_er_date;
+    END IF;
+
+    -- Insertar la orden con la fecha de tipo de cambio corregida
     INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date)
-    VALUES (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date);
+    VALUES (p_date, p_total_amount_usd, p_total_amount_ars, p_customer_id, p_seller_id, p_shipping_id, v_er_date);
 END //
 DELIMITER ;
 
