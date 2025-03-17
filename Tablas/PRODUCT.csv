@@ -1,0 +1,21 @@
+name,color_id,manufacture_year,unit_price_usd,category_id,brand_id
+"iPhone 13, A14 Bionic, 6.1""",2,2020,899.00,1,1
+"iPhone 13 Pro, A15 Bionic, 6.1""",1,2021,999.00,1,1
+"iPhone 14, A15 Bionic, 6.1""",8,2022,1099.00,1,1
+"iPhone 14 Pro, A16 Bionic, 6.1""",5,2023,1199.00,1,1
+"iPad, A13 Bionic, 10.2""",7,2020,699.00,2,1
+"iPad Mini, A15 Bionic, 8.3""",2,2021,799.00,2,1
+"iPad Air, M1, 10.9""",4,2022,899.00,2,1
+"iPad Pro, M2, 12.9""",6,2023,1099.00,2,1
+"Mac Mini, M2, N/A",6,2020,1599.00,3,1
+"iMac, M1, 24""",3,2021,1799.00,3,1
+"MacBook Air, M2, 13.6""",7,2022,1999.00,3,1
+"MacBook Pro, M2, 14""",6,2023,2499.00,3,1
+Apple Watch Series 7,5,2020,299.00,4,1
+Apple Watch Ultra,8,2021,399.00,4,1
+Apple Watch SE,1,2022,599.00,4,1
+Apple Watch Series 8,2,2023,799.00,4,1
+AirPods Max,8,2020,249.00,5,1
+AirPods 2nd Gen,8,2021,199.00,5,1
+AirPods 3rd Gen,8,2022,299.00,5,1
+AirPods Pro 2nd Gen,8,2023,349.00,5,1
