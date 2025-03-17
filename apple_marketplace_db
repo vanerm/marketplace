@@ -637,3 +637,6 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Update records in ORDER_DETAIL to activate the trigger
+UPDATE ORDER_DETAIL
+SET total_product_item = total_product_item; -- This will activate the BEFORE UPDATE trigger
