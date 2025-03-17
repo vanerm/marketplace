@@ -383,22 +383,22 @@ CREATE PROCEDURE INSERT_ORDER(
 BEGIN
     DECLARE v_er_date DATE;
 
-    -- Inicializar v_er_date con NULL
+    -- Initialize v_er_date with NULL
     SET v_er_date = NULL;
 
-    -- Buscar la fecha exacta en USD_EXCHANGE_RATE
+    -- Search for the exact date in USD_EXCHANGE_RATE
     SELECT er_date INTO v_er_date 
     FROM USD_EXCHANGE_RATE 
     WHERE er_date = p_er_date;
 
-    -- Si no existe, buscar la fecha más cercana
+    -- If it does not exist, search for the closest date
     IF v_er_date IS NULL THEN
         SELECT MIN(er_date) INTO v_er_date
         FROM USD_EXCHANGE_RATE 
         WHERE er_date > p_er_date;
     END IF;
 
-    -- Insertar la orden con la fecha de tipo de cambio corregida
+    -- Insert the order with the corrected exchange rate date
     INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date)
     VALUES (p_date, p_total_amount_usd, p_total_amount_ars, p_customer_id, p_seller_id, p_shipping_id, v_er_date);
 END //
