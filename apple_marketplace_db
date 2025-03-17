@@ -304,22 +304,32 @@ INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id,
 
 
 -- Views
--- Create View the total amount in USD and in ARS of all orders
+-- Create View to get the total sum of all orders in USD and ARS
 CREATE VIEW ORDER_TOTAL_AMOUNT AS
-SELECT id, total_amount_usd, total_amount_ars
+SELECT 
+    SUM(total_amount_usd) AS total_amount_usd_sum, 
+    SUM(total_amount_ars) AS total_amount_ars_sum
 FROM ORDER_SALE;
 
--- Create View the total amount in USD of all orders by customer
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CUSTOMER AS
-SELECT customer_id, SUM(total_amount_usd) AS total_amount_usd
+-- Create View for Top 10 Customers by Total Amount in USD
+CREATE VIEW ORDER_TOP_10_CUSTOMERS AS
+SELECT customer_id, 
+       SUM(total_amount_usd) AS total_amount_usd
 FROM ORDER_SALE
-GROUP BY customer_id;
+GROUP BY customer_id
+ORDER BY total_amount_usd DESC
+LIMIT 10;
 
--- Create View the total amount in USD of all orders by seller
+-- Create View for Total Amount in USD by Seller with Seller Name
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SELLER AS
-SELECT seller_id, SUM(total_amount_usd) AS total_amount_usd
-FROM ORDER_SALE
-GROUP BY seller_id;
+SELECT 
+    s.id, 
+    s.name, 
+    SUM(o.total_amount_usd) AS total_amount_usd
+FROM ORDER_SALE o
+JOIN SELLER s ON o.seller_id = s.id
+GROUP BY s.id, s.name
+ORDER BY total_amount_usd DESC;
 
 -- Create View the total amount in USD of all orders by product
 CREATE VIEW ORDER_TOTAL_AMOUNT_BY_PRODUCT AS
