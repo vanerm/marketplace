@@ -7,6 +7,18 @@ realizar compras y gestionar pedidos. Utiliza una base de datos para almacenar i
 
 **Todos los datos utilizados en este proyecto son ficticios y se han creado con fines educativos.**
 
+## Documentación
+Para una comprensión completa del proyecto, incluyendo descripciones detalladas del esquema de la base de datos, guías de uso y objetivos del proyecto, consulta la documentación disponible en Google Drive:
+
+Acceder a la [Documentación](https://docs.google.com/document/d/1lwfsRQTvdEzQEx0sJaCm0JruGCrqgKB4/edit?usp=sharing&ouid=107276296722612983783&rtpof=true&sd=true)
+
+La documentación incluye:
+
+Descripción del Proyecto: Una introducción al proyecto de base de datos del marketplace y sus objetivos.
+Diseño de la Base de Datos: Una explicación detallada de la estructura de la base de datos, incluyendo diagramas de entidad-relación (DER) que ilustran las relaciones entre las tablas y descripciones de cada tabla y sus campos.
+Guía de Uso: Instrucciones sobre cómo ejecutar los scripts SQL, utilizar vistas y procedimientos almacenados, y ejemplos de consultas.
+
+
 ## Características
 
 - **Catálogo de Productos:** Navega por las diferentes categorías de productos de Apple, incluyendo iPhones, iPads, Macs, Apple Watches y AirPods.
