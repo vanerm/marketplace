@@ -47,7 +47,7 @@ Abre un pull request.
 Para preguntas o comentarios, contacta a vanerm.
 
 ## Nota
-Este proyecto fue desarrollado como parte de un curso de SQL de la diplomatura de Data Science en Code House
+Este proyecto fue desarrollado como parte del curso de SQL de la diplomatura de Data Science en Code House
 https://www.coderhouse.com/ar/diplomaturas/data/
 
 
