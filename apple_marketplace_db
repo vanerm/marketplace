@@ -552,6 +552,29 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure to update a product
+DELIMITER //
+CREATE PROCEDURE UPDATE_PRODUCT(
+    IN p_id INT, 
+    IN p_name VARCHAR(45), 
+    IN p_color_id INT, 
+    IN p_manufacture_year INT, 
+    IN p_unit_price_usd DECIMAL(10,2), 
+    IN p_category_id INT, 
+    IN p_brand_id INT
+    )
+BEGIN
+    UPDATE PRODUCT 
+    SET name = p_name, 
+        color_id = p_color_id, 
+        manufacture_year = p_manufacture_year, 
+        unit_price_usd = p_unit_price_usd, 
+        category_id = p_category_id, 
+        brand_id = p_brand_id
+    WHERE id = p_id;
+END //
+DELIMITER ;
+
 -- Triggers
 -- Trigger to update the total product price in USD of an order detail before insert
 DELIMITER //
@@ -651,5 +674,10 @@ DELIMITER ;
 UPDATE ORDER_DETAIL
 SET total_product_item = total_product_item; -- This will activate the BEFORE UPDATE trigger
 
+-- Stored Procedures Examples
+
 -- use the stored procedure to insert a new product
-CALL INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
+CALL INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 497.00, 5, 1);
+
+-- use the stored procedure to update a product
+CALL UPDATE_PRODUCT(21, 'AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
