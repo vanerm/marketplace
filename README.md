@@ -14,9 +14,12 @@ Acceder a la [Documentación](https://docs.google.com/document/d/1lwfsRQTvdEzQEx
 
 La documentación incluye:
 
-Descripción del Proyecto: Una introducción al proyecto de base de datos del marketplace y sus objetivos.
-Diseño de la Base de Datos: Una explicación detallada de la estructura de la base de datos, incluyendo diagramas de entidad-relación (DER) que ilustran las relaciones entre las tablas y descripciones de cada tabla y sus campos.
-Guía de Uso: Instrucciones sobre cómo ejecutar los scripts SQL, utilizar vistas y procedimientos almacenados, y ejemplos de consultas.
+- **Descripción del Proyecto:** Una introducción al proyecto de base de datos del marketplace y sus objetivos.
+
+- **Diseño de la Base de Datos:** Una explicación detallada de la estructura de la base de datos, incluyendo diagramas de entidad-relación (DER) 
+que ilustran las relaciones entre las tablas y descripciones de cada tabla y sus campos.
+
+- **Guía de Uso:** Instrucciones sobre cómo ejecutar los scripts SQL, utilizar vistas y procedimientos almacenados, y ejemplos de consultas.
 
 
 ## Características
