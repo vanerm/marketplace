@@ -660,9 +660,9 @@ CALL INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 497.00, 5, 1);
 -- use the stored procedure to update a product
 CALL UPDATE_PRODUCT(21, 'AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
 
--- use the stored procedure to delete an order and its details
-CALL DELETE_ORDER(1);
-
 -- Use the stored procedure to insert a new order and insert a new order detail
 CALL INSERT_ORDER('2022-11-01', 150.00, 1, 1, 1, '2022-11-01');
 CALL INSERT_ORDER_DETAIL(LAST_INSERT_ID(), 1, 1);
+
+-- use the stored procedure to delete an order and its details
+CALL DELETE_ORDER(1);
