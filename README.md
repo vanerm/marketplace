@@ -23,7 +23,7 @@ realizar compras y gestionar pedidos. Utiliza una base de datos para almacenar i
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/tu_usuario/tu_repositorio.git
+   git clone https://github.com/vanerm/marketplace.git
 
 ## Uso
 Accede a la aplicación a través de tu navegador web en http://localhost:puerto.
