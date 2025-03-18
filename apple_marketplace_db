@@ -607,8 +607,7 @@ AFTER INSERT ON ORDER_SALE
 FOR EACH ROW
 BEGIN
     UPDATE ORDER_SALE
-    SET total_amount_usd = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date),
-    total_amount_ars = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date)
+    SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(NEW.total_amount_usd, NEW.er_date)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
@@ -620,8 +619,7 @@ AFTER UPDATE ON ORDER_SALE
 FOR EACH ROW
 BEGIN
     UPDATE ORDER_SALE
-    SET total_amount_usd = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date),
-    total_amount_ars = NEW.total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = NEW.er_date)
+    SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(NEW.total_amount_usd, NEW.er_date)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
@@ -633,10 +631,7 @@ AFTER INSERT ON SHIPPING
 FOR EACH ROW
 BEGIN
     UPDATE SHIPPING
-    SET shipping_charge_ars = CASE
-        WHEN NEW.is_free_shipping = 1 THEN 0.00
-        ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = NEW.id) / 100
-    END
+    SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
@@ -648,10 +643,7 @@ AFTER UPDATE ON SHIPPING
 FOR EACH ROW    
 BEGIN
     UPDATE SHIPPING
-    SET shipping_charge_ars = CASE
-        WHEN NEW.is_free_shipping = 1 THEN 0.00
-        ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = NEW.id) / 100
-    END
+    SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
