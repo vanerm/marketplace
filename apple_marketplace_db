@@ -433,22 +433,33 @@ SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(total_amount_usd, DATE);
 
 -- Function to calculate the shipping charge based on the city distance and free shipping
 
+-- set the global base rate for shipping
+SET @global_base_rate = 100.00;
+
 DELIMITER //
 
-CREATE FUNCTION CALCULATE_SHIPPING_CHARGE(city_id INT, is_free_shipping BOOLEAN) 
+CREATE FUNCTION CALCULATE_SHIPPING_CHARGE(
+    city_id INT, 
+    is_free_shipping Tinyint(1)
+) 
 RETURNS DECIMAL(10,2)
 DETERMINISTIC
 BEGIN
     DECLARE shipping_charge DECIMAL(10,2);
     DECLARE distance DECIMAL(10,2);
     
-    -- Obtener la distancia de la ciudad
-    SELECT distance_km INTO distance FROM CITY WHERE CITY.id = city_id;
+    -- Get the distance in km from the city
+    SELECT distance_km INTO distance FROM CITY WHERE id = city_id;
 
-    -- Calcular el costo de envío
+    -- If distance is NULL, set it to 0
+    IF distance IS NULL THEN
+        SET distance = 0;
+    END IF;
+
+    -- Calculate the shipping charge
     SET shipping_charge = CASE
         WHEN is_free_shipping = 1 THEN 0.00
-        ELSE 100.00 * distance / 100
+        ELSE @global_base_rate * distance / 100
     END;
 
     RETURN shipping_charge;
