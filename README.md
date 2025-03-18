@@ -34,9 +34,13 @@ Regístrate o inicia sesión para comenzar a realizar compras.
 Si deseas contribuir a este proyecto, por favor sigue estos pasos:
 
 Haz un fork del repositorio.
+
 Crea una nueva rama (git checkout -b feature/nueva-caracteristica).
+
 Realiza tus cambios y haz commit (git commit -m 'Agregué una nueva característica').
+
 Sube tus cambios (git push origin feature/nueva-caracteristica).
+
 Abre un pull request.
 
 ## Contacto
