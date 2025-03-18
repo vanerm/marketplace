@@ -427,13 +427,13 @@ END //
 
 DELIMITER ;
 
--- Update the total amount in ARS for all orders
+-- Update the total amount in ARS for all orders to activate the trigger
 UPDATE ORDER_SALE
 SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(total_amount_usd, DATE);
 
-DELIMITER //
-
 -- Function to calculate the shipping charge based on the city distance and free shipping
+
+DELIMITER //
 
 CREATE FUNCTION CALCULATE_SHIPPING_CHARGE(city_id INT, is_free_shipping BOOLEAN) 
 RETURNS DECIMAL(10,2)
@@ -456,7 +456,7 @@ END //
 
 DELIMITER ;
 
--- Update the shipping charge for all orders
+-- Update the shipping charge for all orders to activate the trigger
 UPDATE SHIPPING
 SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(id, is_free_shipping);
 
@@ -493,7 +493,8 @@ BEGIN
 
     -- Insert the order with the corrected exchange rate date
     INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date)
-    VALUES (p_date, p_total_amount_usd, p_total_amount_ars, p_customer_id, p_seller_id, p_shipping_id, v_er_date);
+    VALUES (p_date, p_total_amount_usd, CALCULATE_TOTAL_AMOUNT_ARS(p_total_amount_usd, v_er_date), 
+            p_customer_id, p_seller_id, p_shipping_id, v_er_date);
 END //
 DELIMITER ;
 
@@ -510,46 +511,14 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create Stored Procedure to delete an order
+-- Create Stored Procedure to delete an order and its details
 DELIMITER //
 CREATE PROCEDURE DELETE_ORDER(
     IN p_id INT
     )
 BEGIN
-    DELETE FROM ORDER_SALE
-    WHERE id = p_id;
-END //
-DELIMITER ;
-
--- Create Stored Procedure to delete an order detail
-DELIMITER //
-CREATE PROCEDURE DELETE_ORDER_DETAIL(
-    IN p_id INT
-    )
-BEGIN
-    DELETE FROM ORDER_DETAIL
-    WHERE id = id;
-END //
-DELIMITER ;
-
--- Create Stored Procedure to get the total amount in USD and ARS of an order
-DELIMITER //
-CREATE PROCEDURE GET_ORDER_TOTAL(
-    IN p_order_id INT,
-    OUT p_total_amount_usd DECIMAL(10,2),
-    OUT p_total_amount_ars DECIMAL(10,2)
-)
-BEGIN
-    SELECT 
-        SUM(total_product_price_usd) INTO p_total_amount_usd
-    FROM ORDER_DETAIL
-    WHERE order_id = p_order_id;
-
-    SELECT 
-        p_total_amount_usd * er_usd INTO p_total_amount_ars
-    FROM ORDER_SALE
-    JOIN USD_EXCHANGE_RATE ON ORDER_SALE.er_date = USD_EXCHANGE_RATE.er_date
-    WHERE ORDER_SALE.id = p_order_id;
+    DELETE FROM ORDER_DETAIL WHERE order_id = p_id;
+    DELETE FROM ORDER_SALE WHERE id = p_id;
 END //
 DELIMITER ;
 
