@@ -44,7 +44,7 @@ Sube tus cambios (git push origin feature/nueva-caracteristica).
 Abre un pull request.
 
 ## Contacto
-Para preguntas o comentarios, contacta a vanerm.
+Para preguntas o comentarios, contacta a [vanerm](https://github.com/vanerm).
 
 ## Nota
 Este proyecto fue desarrollado como parte del curso de SQL de la diplomatura de Data Science en Code House
