@@ -473,18 +473,18 @@ DELIMITER ;
 -- Create Stored Procedure to delete an order
 DELIMITER //
 CREATE PROCEDURE DELETE_ORDER(
-    IN id INT
+    IN p_id INT
     )
 BEGIN
     DELETE FROM ORDER_SALE
-    WHERE id = id;
+    WHERE id = p_id;
 END //
 DELIMITER ;
 
 -- Create Stored Procedure to delete an order detail
 DELIMITER //
 CREATE PROCEDURE DELETE_ORDER_DETAIL(
-    IN id INT
+    IN p_id INT
     )
 BEGIN
     DELETE FROM ORDER_DETAIL
