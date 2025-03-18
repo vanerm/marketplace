@@ -405,20 +405,60 @@ JOIN SHIPPER sh ON s.shipper_id = sh.id
 GROUP BY s.id, sh.name;
 
 -- Functions
+-- Function to calculate the total amount in ARS based on the exchange rate
 
--- Function 1: At table ORDER_SALE, update the total_amount_ars column with the total_amount_usd column multiplied by the exchange rate
+DELIMITER //
+
+CREATE FUNCTION CALCULATE_TOTAL_AMOUNT_ARS(order_total_usd DECIMAL(10,2), order_date DATE) 
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE exchange_rate DECIMAL(10,2);
+    
+    -- Obtener la tasa de cambio del día
+    SELECT er_usd INTO exchange_rate 
+    FROM USD_EXCHANGE_RATE 
+    WHERE er_date = order_date 
+    LIMIT 1;
+
+    -- Calcular el total en ARS
+    RETURN order_total_usd * exchange_rate;
+END //
+
+DELIMITER ;
+
+-- Update the total amount in ARS for all orders
 UPDATE ORDER_SALE
-SET total_amount_ars = total_amount_usd * (SELECT er_usd FROM USD_EXCHANGE_RATE WHERE er_date = DATE);
+SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(total_amount_usd, DATE);
 
--- Function 2: At table Shipping, update the shipping_charge column with the following rule:
--- If free shipping is true then shipping charge is $0.00
--- if free shipping is false:
--- if state is Buenos Aires then shipping charge is $0 else shipping charge is $100 every 100 km to the city
+DELIMITER //
+
+-- Function to calculate the shipping charge based on the city distance and free shipping
+
+CREATE FUNCTION CALCULATE_SHIPPING_CHARGE(city_id INT, is_free_shipping BOOLEAN) 
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE shipping_charge DECIMAL(10,2);
+    DECLARE distance DECIMAL(10,2);
+    
+    -- Obtener la distancia de la ciudad
+    SELECT distance_km INTO distance FROM CITY WHERE CITY.id = city_id;
+
+    -- Calcular el costo de envío
+    SET shipping_charge = CASE
+        WHEN is_free_shipping = 1 THEN 0.00
+        ELSE 100.00 * distance / 100
+    END;
+
+    RETURN shipping_charge;
+END //
+
+DELIMITER ;
+
+-- Update the shipping charge for all orders
 UPDATE SHIPPING
-SET shipping_charge_ars = CASE
-    WHEN is_free_shipping = 1 THEN 0.00
-    ELSE 100.00 * (SELECT distance_km FROM CITY WHERE CITY.id = SHIPPING.id) / 100
-END;
+SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(id, is_free_shipping);
 
 -- Stored Procedures 
 -- Create Stored Procedure to insert a new order
