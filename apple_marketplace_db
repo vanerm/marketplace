@@ -475,7 +475,7 @@ UPDATE SHIPPING
 SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(id, is_free_shipping);
 
 -- Stored Procedures 
--- Create Stored Procedure to insert a new order
+-- Stored Procedure to insert a new order
 DELIMITER //
 
 CREATE PROCEDURE INSERT_ORDER(
@@ -512,7 +512,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create Stored Procedure to insert a new order detail
+-- Stored Procedure to insert a new order detail
 DELIMITER //
 CREATE PROCEDURE INSERT_ORDER_DETAIL(
     IN p_total_product_item INT, 
@@ -525,7 +525,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create Stored Procedure to delete an order and its details
+-- Stored Procedure to delete an order and its details
 DELIMITER //
 CREATE PROCEDURE DELETE_ORDER(
     IN p_id INT
@@ -536,8 +536,24 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure to add a new product
+DELIMITER //
+CREATE PROCEDURE INSERT_PRODUCT(
+    IN p_name VARCHAR(45), 
+    IN p_color_id INT, 
+    IN p_manufacture_year INT, 
+    IN p_unit_price_usd DECIMAL(10,2), 
+    IN p_category_id INT, 
+    IN p_brand_id INT
+    )
+BEGIN
+    INSERT INTO PRODUCT (name, color_id, manufacture_year, unit_price_usd, category_id, brand_id)
+    VALUES (p_name, p_color_id, p_manufacture_year, p_unit_price_usd, p_category_id, p_brand_id);
+END //
+DELIMITER ;
+
 -- Triggers
--- Create a Trigger to update the total product price in USD of an order detail before insert
+-- Trigger to update the total product price in USD of an order detail before insert
 DELIMITER //
 CREATE TRIGGER before_order_detail_insert
 BEFORE INSERT ON ORDER_DETAIL
@@ -560,7 +576,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create a Trigger to update the total product price in USD of an order detail before update
+-- Trigger to update the total product price in USD of an order detail before update
 DELIMITER //
 CREATE TRIGGER before_order_detail_update
 BEFORE UPDATE ON ORDER_DETAIL
@@ -583,7 +599,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create a Trigger to update the total product price in USD of an order detail after insert
+-- Trigger to update the total product price in USD of an order detail after insert
 DELIMITER //
 CREATE TRIGGER UPDATE_TOTAL_AMOUNT_AFTER_INSERT
 AFTER INSERT ON ORDER_SALE
@@ -595,7 +611,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create a Trigger to update the total amount in USD and in ARS of an order after update
+-- Trigger to update the total amount in USD and in ARS of an order after update
 DELIMITER //
 CREATE TRIGGER UPDATE_TOTAL_AMOUNT_AFTER_UPDATE
 AFTER UPDATE ON ORDER_SALE
@@ -607,7 +623,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create a Trigger to update the shipping charge of a shipping after insert
+-- Trigger to update the shipping charge of a shipping after insert
 DELIMITER //
 CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_INSERT
 AFTER INSERT ON SHIPPING
@@ -619,7 +635,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Create a Trigger to update the shipping charge of a shipping after update
+-- Trigger to update the shipping charge of a shipping after update
 DELIMITER //
 CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_UPDATE
 AFTER UPDATE ON SHIPPING
@@ -634,3 +650,6 @@ DELIMITER ;
 -- Update records in ORDER_DETAIL to activate the trigger
 UPDATE ORDER_DETAIL
 SET total_product_item = total_product_item; -- This will activate the BEFORE UPDATE trigger
+
+-- use the stored procedure to insert a new product
+CALL INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
