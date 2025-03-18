@@ -303,8 +303,8 @@ INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id,
 INSERT INTO ORDER_DETAIL (total_product_price_usd, total_product_item, order_id, product_id) VALUES (0, 1, 10, 6);
 
 -- Views
--- Create View to get the total sum of all orders in USD and ARS by year
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_YEAR AS
+-- View to get the total sum of all orders in USD and ARS by year
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_YEAR AS
 SELECT 
     YEAR(date) AS order_year, -- add year column
     SUM(total_amount_usd) AS total_amount_usd_sum, 
@@ -312,8 +312,8 @@ SELECT
 FROM ORDER_SALE
 GROUP BY order_year; -- group by year
 
--- Create View to get the total sum of all orders in USD and ARS by year/month
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_YEAR_MONTH AS
+-- View to get the total sum of all orders in USD and ARS by year/month
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_YEAR_MONTH AS
 SELECT 
     YEAR(date) AS order_year, -- add year column
     MONTH(date) AS order_month, -- add month column
@@ -322,9 +322,9 @@ SELECT
 FROM ORDER_SALE
 GROUP BY order_year, order_month; -- group by year and month
 
--- Create View for Top 10 Customers by Total Amount in USD
+-- View for Top 10 Customers by Total Amount in USD
 -- add customer name and customer id to the view
-CREATE VIEW ORDER_TOP_10_CUSTOMERS AS
+CREATE VIEW VW_ORDER_TOP_10_CUSTOMERS AS
 SELECT 
     cu.id AS customer_id,
     cu.name,        
@@ -335,8 +335,8 @@ GROUP BY cu.id, cu.name
 ORDER BY total_amount_usd DESC
 LIMIT 10;
 
--- Create View for Total Amount in USD by Seller with Seller Name
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SELLER AS
+-- View for Total Amount in USD by Seller with Seller Name
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_SELLER AS
 SELECT 
     s.id, 
     s.name, 
@@ -346,8 +346,8 @@ JOIN SELLER s ON o.seller_id = s.id
 GROUP BY s.id, s.name
 ORDER BY total_amount_usd DESC;
 
--- Create View the total amount in USD of all orders by product
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_PRODUCT AS
+-- View the total amount in USD of all orders by product
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_PRODUCT AS
 SELECT 
     od.product_id, 
     p.name,
@@ -357,8 +357,8 @@ FROM ORDER_DETAIL od
 JOIN PRODUCT p ON od.product_id = p.id
 GROUP BY od.product_id, p.name;
 
--- Create View the total amount in USD of all orders by category
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CATEGORY AS
+-- View the total amount in USD of all orders by category
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_CATEGORY AS
 SELECT 
     c.name AS category_name, 
     SUM(od.total_product_item) AS total_product_item,
@@ -368,8 +368,8 @@ JOIN PRODUCT p ON od.product_id = p.id
 JOIN CATEGORY c ON p.category_id = c.id
 GROUP BY c.name;
 
--- Create View the total amount in USD of all orders by color
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_COLOR AS
+-- View the total amount in USD of all orders by color
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_COLOR AS
 SELECT 
     p.color_id, 
     co.name AS color_name,
@@ -380,8 +380,8 @@ JOIN COLOR co ON p.color_id = co.id
 GROUP BY p.color_id, co.name
 ORDER BY total_product_price_usd DESC;  
 
--- Create View the total amount in USD of all orders by city
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_CITY AS
+-- View the total amount in USD of all orders by city
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_CITY AS
 SELECT 
     a.city_id, 
     c.name AS city_name,
@@ -393,8 +393,8 @@ JOIN CITY c ON a.city_id = c.id
 GROUP BY a.city_id, c.name
 ORDER BY total_amount_usd DESC;
 
--- Create View the total amount in USD of all orders by shipper
-CREATE VIEW ORDER_TOTAL_AMOUNT_BY_SHIPPER AS
+-- View the total amount in USD of all orders by shipper
+CREATE VIEW VW_ORDER_TOTAL_AMOUNT_BY_SHIPPER AS
 SELECT 
     s.id, 
     sh.name AS shipper_name, 
@@ -409,7 +409,7 @@ GROUP BY s.id, sh.name;
 
 DELIMITER //
 
-CREATE FUNCTION CALCULATE_TOTAL_AMOUNT_ARS(
+CREATE FUNCTION FN_CALCULATE_TOTAL_AMOUNT_ARS(
     order_total_usd DECIMAL(10,2), 
     order_date DATE
     ) 
@@ -432,7 +432,7 @@ DELIMITER ;
 
 -- Update the total amount in ARS for all orders to activate the trigger
 UPDATE ORDER_SALE
-SET total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(total_amount_usd, DATE);
+SET total_amount_ars = FN_CALCULATE_TOTAL_AMOUNT_ARS(total_amount_usd, DATE);
 
 -- Function to calculate the shipping charge based on the city distance and free shipping
 
@@ -441,7 +441,7 @@ SET @global_base_rate = 100.00;
 
 DELIMITER //
 
-CREATE FUNCTION CALCULATE_SHIPPING_CHARGE(
+CREATE FUNCTION FN_CALCULATE_SHIPPING_CHARGE(
     city_id INT, 
     is_free_shipping Tinyint(1)
 ) 
@@ -472,13 +472,13 @@ DELIMITER ;
 
 -- Update the shipping charge for all orders to activate the trigger
 UPDATE SHIPPING
-SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(id, is_free_shipping);
+SET shipping_charge_ars = FN_CALCULATE_SHIPPING_CHARGE(id, is_free_shipping);
 
 -- Stored Procedures 
 -- Stored Procedure to insert a new order
 DELIMITER //
 
-CREATE PROCEDURE INSERT_ORDER(
+CREATE PROCEDURE SP_INSERT_ORDER(
     IN p_date DATE, 
     IN p_total_amount_usd DECIMAL(10,2), 
     IN p_customer_id INT, 
@@ -506,7 +506,7 @@ BEGIN
     END IF;
 
     -- Calculate total_amount_ars using the calculated exchange rate
-    SET v_total_amount_ars = CALCULATE_TOTAL_AMOUNT_ARS(p_total_amount_usd, v_er_date);
+    SET v_total_amount_ars = FN_CALCULATE_TOTAL_AMOUNT_ARS(p_total_amount_usd, v_er_date);
 
     -- Insert the order with the corrected exchange rate date
     INSERT INTO ORDER_SALE (date, total_amount_usd, total_amount_ars, customer_id, seller_id, shipping_id, er_date)
@@ -516,7 +516,7 @@ DELIMITER ;
 
 -- Stored Procedure to insert a new order detail
 DELIMITER //
-CREATE PROCEDURE INSERT_ORDER_DETAIL(
+CREATE PROCEDURE SP_INSERT_ORDER_DETAIL(
     IN p_total_product_item INT, 
     IN p_order_id INT, 
     IN p_product_id INT
@@ -529,7 +529,7 @@ DELIMITER ;
 
 -- Stored Procedure to delete an order and its details
 DELIMITER //
-CREATE PROCEDURE DELETE_ORDER(
+CREATE PROCEDURE SP_DELETE_ORDER(
     IN p_id INT
     )
 BEGIN
@@ -540,7 +540,7 @@ DELIMITER ;
 
 -- Stored Procedure to add a new product
 DELIMITER //
-CREATE PROCEDURE INSERT_PRODUCT(
+CREATE PROCEDURE SP_INSERT_PRODUCT(
     IN p_name VARCHAR(45), 
     IN p_color_id INT, 
     IN p_manufacture_year INT, 
@@ -556,7 +556,7 @@ DELIMITER ;
 
 -- Stored Procedure to update a product
 DELIMITER //
-CREATE PROCEDURE UPDATE_PRODUCT(
+CREATE PROCEDURE SP_UPDATE_PRODUCT(
     IN p_id INT, 
     IN p_name VARCHAR(45), 
     IN p_color_id INT, 
@@ -580,7 +580,7 @@ DELIMITER ;
 -- Triggers
 -- Trigger to update the total product price in USD of an order detail before insert
 DELIMITER //
-CREATE TRIGGER before_order_detail_insert
+CREATE TRIGGER TRG_BEFORE_ORDER_DETAIL_INSERT
 BEFORE INSERT ON ORDER_DETAIL
 FOR EACH ROW
 BEGIN
@@ -603,7 +603,7 @@ DELIMITER ;
 
 -- Trigger to update the total product price in USD of an order detail before update
 DELIMITER //
-CREATE TRIGGER before_order_detail_update
+CREATE TRIGGER TRG_BEFORE_ORDER_DETAIL_UPDATE
 BEFORE UPDATE ON ORDER_DETAIL
 FOR EACH ROW
 BEGIN
@@ -626,24 +626,24 @@ DELIMITER ;
 
 -- Trigger to update the shipping charge of a shipping after insert
 DELIMITER //
-CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_INSERT
+CREATE TRIGGER TRG_UPDATE_SHIPPING_CHARGE_AFTER_INSERT
 AFTER INSERT ON SHIPPING
 FOR EACH ROW
 BEGIN
     UPDATE SHIPPING
-    SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
+    SET shipping_charge_ars = FN_CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
 
 -- Trigger to update the shipping charge of a shipping after update
 DELIMITER //
-CREATE TRIGGER UPDATE_SHIPPING_CHARGE_AFTER_UPDATE
+CREATE TRIGGER TRG_UPDATE_SHIPPING_CHARGE_AFTER_UPDATE
 AFTER UPDATE ON SHIPPING
 FOR EACH ROW    
 BEGIN
     UPDATE SHIPPING
-    SET shipping_charge_ars = CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
+    SET shipping_charge_ars = FN_CALCULATE_SHIPPING_CHARGE(NEW.id, NEW.is_free_shipping)
     WHERE id = NEW.id;
 END //
 DELIMITER ;
@@ -655,14 +655,14 @@ SET total_product_item = total_product_item; -- This will activate the BEFORE UP
 -- Stored Procedures Examples
 
 -- use the stored procedure to insert a new product
-CALL INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 497.00, 5, 1);
+CALL SP_INSERT_PRODUCT('AirPods Pro 3rd Gen', 8, 2024, 497.00, 5, 1);
 
 -- use the stored procedure to update a product
-CALL UPDATE_PRODUCT(21, 'AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
+CALL SP_UPDATE_PRODUCT(21, 'AirPods Pro 3rd Gen', 8, 2024, 499.00, 5, 1);
 
 -- Use the stored procedure to insert a new order and insert a new order detail
-CALL INSERT_ORDER('2022-11-01', 150.00, 1, 1, 1, '2022-11-01');
-CALL INSERT_ORDER_DETAIL(LAST_INSERT_ID(), 1, 1);
+CALL SP_INSERT_ORDER('2022-11-01', 150.00, 1, 1, 1, '2022-11-01');
+CALL SP_INSERT_ORDER_DETAIL(LAST_INSERT_ID(), 1, 1);
 
 -- use the stored procedure to delete an order and its details
-CALL DELETE_ORDER(1);
+CALL SP_DELETE_ORDER(1);
