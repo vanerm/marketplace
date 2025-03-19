@@ -587,15 +587,15 @@ BEGIN
     DECLARE unit_price DECIMAL(10,2);
     DECLARE product_exists INT;
 
-    -- Verificar si el producto existe
+    -- Verify if the product exist 
     SELECT COUNT(*) INTO product_exists FROM PRODUCT WHERE id = NEW.product_id;
 
     IF product_exists = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El product_id no existe en la tabla PRODUCT';
     ELSE
-        -- Obtener el precio unitario del producto
+        -- Get the product unit price
         SELECT unit_price_usd INTO unit_price FROM PRODUCT WHERE id = NEW.product_id;
-        -- Calcular el total_product_price_usd
+        -- Calculate the total_product_price_usd
         SET NEW.total_product_price_usd = NEW.total_product_item * unit_price;
     END IF;
 END //
@@ -610,15 +610,15 @@ BEGIN
     DECLARE unit_price DECIMAL(10,2);
     DECLARE product_exists INT;
 
-    -- Verificar si el producto existe
+    -- Verify if the product exist
     SELECT COUNT(*) INTO product_exists FROM PRODUCT WHERE id = NEW.product_id;
 
     IF product_exists = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El product_id no existe en la tabla PRODUCT';
     ELSE
-        -- Obtener el precio unitario del producto
+        -- Get the product unit price
         SELECT unit_price_usd INTO unit_price FROM PRODUCT WHERE id = NEW.product_id;
-        -- Calcular el total_product_price_usd
+        -- Calculate the total_product_price_usd
         SET NEW.total_product_price_usd = NEW.total_product_item * unit_price;
     END IF;
 END //
