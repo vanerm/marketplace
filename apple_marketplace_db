@@ -215,9 +215,9 @@ INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-11-01', 150.00);
 INSERT INTO USD_EXCHANGE_RATE (er_date, er_usd) VALUES ('2022-12-01', 155.00);
 
 -- insert data into CUSTOMER table
-INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Juan Perez', '30-12345678-9', 01112345678, 1, 1);
-INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Maria Lopez', '30-23456789-0', 01123456789, 2, 1);
-INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Pedro Gomez', '30-34567890-1', 01134567890, 3, 1);
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Juan Perez', '12345678', 01112345678, 1, 1);
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Maria Lopez', '23456789', 01123456789, 2, 1);
+INSERT INTO CUSTOMER (name, dni, phone, address_id, is_subscribed) VALUES ('Pedro Gomez', '34567890', 01134567890, 3, 1);
 
 -- insert data into SELLER table
 INSERT INTO SELLER (name, cuit, address_id) VALUES ('Mac Station', '30-12345678-9', 1);
